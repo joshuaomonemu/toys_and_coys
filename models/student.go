@@ -23,12 +23,12 @@ var stu *Students
 
 func CreateStudent() bool {
 	//Cleaning data for student registration
-	_, err := client.Doc("m.21MED13291").Create(ctx, map[string]interface{}{
-		"department": "civil enginnering",
-		"level":      "300",
-		"name":       "okiemute michael",
-		"password":   "123cat",
-		"matno":      "m.21MED13291",
+	_, err := client.Doc("m.18CE2190").Create(ctx, map[string]interface{}{
+		"department": "Techncial Engineering",
+		"level":      "500",
+		"name":       "Stephen Bailes",
+		"password":   "supercoat",
+		"matno":      "m.18CE2190",
 	})
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
@@ -78,13 +78,12 @@ func DeleteStudent(key string) bool {
 }
 
 // Function to update student details
-func UpdateStudent(key string) bool {
+func UpdateStudent(key string, students *Students) bool {
 	_, err := client.Doc(key).Set(ctx, map[string]interface{}{
-		"department": "plant science",
-		"level":      "400",
-		"name":       "Francis Osayende",
-		"password":   "mylovefordogs",
-		"matno":      "AE99PL1222",
+		"department": students.Department,
+		"level":      students.Level,
+		"name":       students.Name,
+		"matno":      students.Matno,
 	})
 	if err != nil {
 		log.Printf("An error has occurred: %s", err)

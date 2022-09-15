@@ -35,8 +35,9 @@ func Routes() {
 
 	// Api for User
 	//r.HandleFunc("/api/user/get{id}", api.GetUser).Methods("GET")
-	r.HandleFunc("/api/user/create", api.CreateStudent).Methods("GET")
-	r.HandleFunc("/api/user/delete/{id}", api.DeleteStudent).Methods("GET")
-	r.HandleFunc("/api/user/get/{id}", api.ReadStudent).Methods("GET")
+	r.HandleFunc("/api/student/create", api.CreateStudent).Methods("POST")
+	r.HandleFunc("/api/student/delete/{id}", api.DeleteStudent).Methods("GET")
+	r.HandleFunc("/api/student/get/{id}", api.ReadStudent).Methods("GET")
+	r.HandleFunc("/api/student/update/{id}", api.UpdateStudent).Methods("POST")
 	log.Fatal(http.ListenAndServe(":2020", r))
 }

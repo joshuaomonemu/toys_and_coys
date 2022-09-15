@@ -6,6 +6,5 @@ func CleanStudent(dept string, name string, mat_no string) (string, string, stri
 	dept = strings.ToLower(dept)
 	name = strings.ToLower(name)
 	mat_no = strings.ToLower(mat_no)
-
 	return dept, name, mat_no
 }

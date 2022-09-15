@@ -49,10 +49,7 @@ func ReadStudent(w http.ResponseWriter, r *http.Request){
 	if err != nil{
 		log.Fatal("Error unmarshalling JSON")
 	}
-	dept := string(p.Department)
-	matno := string(p.Matno)
-	name := string(p.Name)
-	level := string(p.Level)
+	dept, matno, name, level := string(p.Department), string(p.Matno), string(p.Name), string(p.Level)
 
 	//Sending details as header values
 	w.Header().Set("Department", dept)
@@ -62,5 +59,30 @@ func ReadStudent(w http.ResponseWriter, r *http.Request){
 }
 
 func UpdateStudent(w http.ResponseWriter, r *http.Request){
+	params := mux.Vars(r)
+	id := params["id"]
+	id = strings.Trim(id, "{}")
+	fmt.Println(id)
 
+
+	//Sourcing data from request header
+	dept := w.Header().Get("dept")
+	matno := w.Header().Get("matno")
+	name := w.Header().Get("name")
+	level := w.Header().Get("level")
+
+	//Data Schema for updating students information
+	packed := &models.Students{
+		Level: level,
+		Department: dept,
+		Matno: matno,
+		Name: name,
+	}
+	//Getting response from server to check if update was successful
+	resp := models.UpdateStudent(id, packed)
+	if resp == true{
+	w.Header().Set("update", "complete")
+}else{
+	w.Header().Set("update", "failed")
+	}
 }
