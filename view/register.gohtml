@@ -4,7 +4,7 @@
 <!-- Mirrored from coderthemes.com/adminto/layouts/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 Sep 2022 20:40:00 GMT -->
 <head>
         <meta charset="utf-8" />
-        <title>Register & Signup | Adminto - Responsive Admin Dashboard Template</title>
+        <title>Register & Signup | Toys & Coys</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -18,6 +18,8 @@
 
 		<!-- icons -->
 		<link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     </head>
 
@@ -41,19 +43,26 @@
                                     <h4 class="text-uppercase mt-0">Register</h4>
                                 </div>
 
-                                <form action="#">
 
                                     <div class="mb-3">
                                         <label for="fullname" class="form-label">Full Name</label>
                                         <input class="form-control" type="text" id="fullname" placeholder="Enter your name" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="emailaddress" class="form-label">Email address</label>
-                                        <input class="form-control" type="email" id="emailaddress" required placeholder="Enter your email">
+                                        <label for="department" class="form-label">Department</label>
+                                        <input class="form-control" type="text" id="department" required placeholder="Enter your email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="matno" class="form-label">Matriculation Number</label>
+                                        <input class="form-control" type="text" id="matno" required placeholder="Enter your email">
                                     </div>
                                     <div class="mb-3">
                                         <label for="password" class="form-label">Password</label>
-                                        <input class="form-control" type="password" required id="password" placeholder="Enter your password">
+                                        <input class="form-control" type="password" id="password" required placeholder="Enter your email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="level" class="form-label">Level</label>
+                                        <input class="form-control" type="text" required id="level" placeholder="Enter your password">
                                     </div>
                                     <div class="mb-3">
                                         <div class="form-check">
@@ -65,7 +74,6 @@
                                         <button class="btn btn-primary" type="submit"> Sign Up </button>
                                     </div>
 
-                                </form>
 
                             </div> <!-- end card-body -->
                         </div>
@@ -97,7 +105,64 @@
 
         <!-- App js -->
         <script src="assets/js/app.min.js"></script>
-        
+        <script>
+            function RegStu(){
+                let fullname = document.getElementById('fullname').value;
+                let password = document.getElementById('password').value;
+                let matno = document.getElementById('matno').value;
+                let level = document.getElementById('level').value;
+                let department = document.getElementById('department').value;
+                let xhttp = new XMLHttpRequest();
+
+
+                xhttp.open("POST", "/api/student/create", true);
+                console.log(this.status);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("fullname=" + fullname + "&password=" + password + "&matno=" + matno + "&level=" + level + "&department=" + department);
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let rv = xhttp.getResponseHeader("success")
+                        if (rv == "true") {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                onOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Signed in successfully'
+                            })
+                            //setTimeout(window.location.href = "./main", 60000);
+                            window.location.reload();
+                        } else {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                onOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'error',
+                                    title: 'Error Registering New Student'
+                            })
+                        }
+                    }
+                }
+            }
+        </script>
     </body>
 
 <!-- Mirrored from coderthemes.com/adminto/layouts/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 Sep 2022 20:40:00 GMT -->

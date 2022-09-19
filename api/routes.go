@@ -13,8 +13,17 @@ import (
 var p *models.Students
 
 func CreateStudent(w http.ResponseWriter, r *http.Request) {
-	resp := models.CreateStudent()
-	w.Header().Set("Page", "Create")
+	//Getting data from filled forms to sedn across to the database
+	matno := r.FormValue("matno")
+	fullname := r.FormValue("fullname")
+	department := r.FormValue("department")
+	password := r.FormValue("password")
+	level := r.FormValue("level")
+
+	//Sending data over to modelling page to carry out account creation and return a bool response on completion
+	resp := models.CreateStudent(matno, fullname, department, password, level)
+
+	//Sending response to response header
 	if resp == true {
 		w.Header().Set("Created", "Done")
 	} else {
@@ -86,3 +95,10 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("update", "failed")
 	}
 }
+
+//func LoginStudent(w http.ResponseWriter, r *http.Request){
+//	matno := r.FormValue("matno");
+//	password := r.FormValue("password")
+//
+//	resp := models
+//}

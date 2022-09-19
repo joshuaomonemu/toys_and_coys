@@ -40,7 +40,6 @@
                                     <h4 class="text-uppercase mt-0">Sign In</h4>
                                 </div>
 
-                                <form action="#">
                                     <div class="mb-3">
                                         <label for="emailaddress" class="form-label">Matriculation Number</label>
                                         <input class="form-control" type="email" id="matno" required="" placeholder="Enter your Matriculation Number">
@@ -59,9 +58,8 @@
                                     </div>
 
                                     <div class="mb-3 d-grid text-center">
-                                        <button class="btn btn-primary" type="submit"> Log In </button>
+                                        <button class="btn btn-primary" onclick="Logger();"> Log In </button>
                                     </div>
-                                </form>
 
                             </div> <!-- end card-body -->
                         </div>
@@ -84,6 +82,62 @@
         <!-- end page -->
 
         <!-- Vendor -->
+        <script>
+            function Logger(){
+
+                let password = document.getElementById('password').value;
+                let matno = document.getElementById('matno').value;
+                let xhttp = new XMLHttpRequest();
+
+
+                xhttp.open("POST", "/api/student/get", true);
+                console.log(this.status);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("password=" + password + "&matno=" + matno);
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let rv = xhttp.getResponseHeader("success")
+                        if (rv == "true") {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                onOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Signed in successfully'
+                            })
+                            //setTimeout(window.location.href = "./main", 60000);
+                            window.location.reload();
+                        } else {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                onOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Error Logging In'
+                            })
+                        }
+                    }
+                }
+            }
+        </script>
         <script src="assets/libs/jquery/jquery.min.js"></script>
         <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="assets/libs/simplebar/simplebar.min.js"></script>

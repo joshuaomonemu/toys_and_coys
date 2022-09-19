@@ -10,3 +10,11 @@ func main() {
 	name := string(p.Name)
 	level := string(p.Level)
 	fmt.Println(dept, matno, name, level)
+
+
+
+	//Vars
+	params := mux.Vars(r)
+    	id := params["id"]
+    	id = strings.Trim(id, "{}")
+    	fmt.Println(id)

@@ -21,14 +21,14 @@ var stu *Students
 
 //Function to create students
 
-func CreateStudent() bool {
+func CreateStudent(matno, fullname, department, password, level string) bool {
 	//Cleaning data for student registration
-	_, err := client.Doc("m.18CE2190").Create(ctx, map[string]interface{}{
-		"department": "Techncial Engineering",
-		"level":      "500",
-		"name":       "Stephen Bailes",
-		"password":   "supercoat",
-		"matno":      "m.18CE2190",
+	_, err := client.Doc(matno).Create(ctx, map[string]interface{}{
+		"department": department,
+		"level":      level,
+		"name":       fullname,
+		"password":   password,
+		"matno":      matno,
 	})
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
@@ -91,3 +91,7 @@ func UpdateStudent(key string, students *Students) bool {
 	}
 	return true
 }
+
+//func LoginStudent(matno, password string){
+//	query := client.Where(matno, "==", "matno").Where(password, "==", "password")
+//}
