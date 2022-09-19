@@ -45,7 +45,6 @@ func Routes() {
 	// Api for User
 	//r.HandleFunc("/api/user/get{id}", api.GetUser).Methods("GET")
 	port :=  os.Getenv("PORT")
-	port = "2020"
 	r.HandleFunc("/api/student/create", api.CreateStudent).Methods("POST")
 	r.HandleFunc("/api/student/delete/{id}", api.DeleteStudent).Methods("GET")
 	r.HandleFunc("/api/student/get/{id}", api.ReadStudent).Methods("GET")
