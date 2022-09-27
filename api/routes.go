@@ -25,7 +25,7 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 
 	//Sending response to response header
 	if resp == true {
-		w.Header().Set("Created", "Done")
+		w.Header().Set("Created", "true")
 	} else {
 		w.Header().Set("Created", "False")
 	}
@@ -96,9 +96,15 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request){
 	}
 }
 
-//func LoginStudent(w http.ResponseWriter, r *http.Request){
-//	matno := r.FormValue("matno");
-//	password := r.FormValue("password")
-//
-//	resp := models
-//}
+
+func LoginStudent(w http.ResponseWriter, r *http.Request){
+	matno := r.FormValue("matno");
+	password := r.FormValue("password")
+
+	resp := models.LoginStudent(matno, password)
+	if resp == true{
+		w.Header().Set("login", "successful")
+	}else{
+		w.Header().Set("login", "failed")
+	}
+}

@@ -4,6 +4,7 @@ import (
 	database "app/database"
 	"context"
 	"encoding/json"
+	"google.golang.org/api/iterator"
 	"log"
 )
 
@@ -16,6 +17,7 @@ type Students struct {
 }
 
 var client = database.CreateClient().Collection("students")
+//var courses = database.CreateClient().Collection("courses")
 var ctx = context.Background()
 var stu *Students
 
@@ -92,6 +94,29 @@ func UpdateStudent(key string, students *Students) bool {
 	return true
 }
 
-//func LoginStudent(matno, password string){
-//	query := client.Where(matno, "==", "matno").Where(password, "==", "password")
+func LoginStudent(key, password string)bool {
+	var x map[string]interface{}
+	query := client.Where("matno", "==", key).Where("password", "==", password).Documents(ctx)
+	for{
+		doc, err := query.Next()
+		if err == iterator.Done{
+			break
+		}
+		//Ignoring error handling on testing phase
+		//if err != nil{
+		//	fmt.Println(err)
+		//}
+		x = doc.Data()
+
+		//fmt.Println(doc.Data())
+	}
+	if len(x) == 0{
+		return false
+	}else{
+		return true
+	}
+}
+
+//func GetAllCourses(){
+//
 //}

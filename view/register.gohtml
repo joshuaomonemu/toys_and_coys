@@ -121,7 +121,7 @@
                 xhttp.send("fullname=" + fullname + "&password=" + password + "&matno=" + matno + "&level=" + level + "&department=" + department);
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        let rv = xhttp.getResponseHeader("success")
+                        let rv = xhttp.getResponseHeader("Created")
                         if (rv == "true") {
                             const Toast = Swal.mixin({
                                 toast: true,
