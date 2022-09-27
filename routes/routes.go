@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"os"
 )
 
 // Starting route points
@@ -43,8 +44,7 @@ func Routes() {
 
 	// Api for User
 	//r.HandleFunc("/api/user/get{id}", api.GetUser).Methods("GET")
-	//port :=  os.Getenv("PORT")
-	port := "2020"
+	port :=  os.Getenv("PORT")
 	r.HandleFunc("/api/student/create", api.CreateStudent).Methods("POST")
 	r.HandleFunc("/api/student/delete/{id}", api.DeleteStudent).Methods("GET")
 	r.HandleFunc("/api/student/get/{id}", api.ReadStudent).Methods("GET")
