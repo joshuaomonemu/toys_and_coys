@@ -18,3 +18,25 @@ func main() {
     	id := params["id"]
     	id = strings.Trim(id, "{}")
     	fmt.Println(id)
+
+
+
+
+
+
+
+
+
+
+
+
+    	 {{range .}}
+                                        <div class="item">
+                                            <a href="/adduser?user={{.}}" class="user-status-box">
+                                                <div class="avatar-xs mx-auto d-block chat-user-img online">
+                                                    <img src="assets/images/users/avatar-2.jpg" alt="user-img"
+                                                        class="img-fluid rounded-circle">
+                                                    <span class="user-status"></span>
+                                                </div>
+
+                                                <h5 class="font-size-13 text-truncate mt-3 mb-1">{{.}}</h5>

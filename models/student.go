@@ -4,8 +4,10 @@ import (
 	database "app/database"
 	"context"
 	"encoding/json"
+	"fmt"
 	"google.golang.org/api/iterator"
 	"log"
+	"strings"
 )
 
 type Students struct {
@@ -16,21 +18,28 @@ type Students struct {
 	Password   string `json:"password"`
 }
 
+type Classes struct{
+	Courses []string
+	Class_id []string
+}
+
 var client = database.CreateClient().Collection("students")
-//var courses = database.CreateClient().Collection("courses")
+var course_list = database.CreateClient().Collection("courses")
 var ctx = context.Background()
 var stu *Students
 
 //Function to create students
 
-func CreateStudent(matno, fullname, department, password, level string) bool {
+func CreateStudent(matno, fullname, department, password, level, course_list string) bool {
 	//Cleaning data for student registration
+	course_li := strings.SplitAfter(course_list, ",")
 	_, err := client.Doc(matno).Create(ctx, map[string]interface{}{
 		"department": department,
 		"level":      level,
 		"name":       fullname,
 		"password":   password,
 		"matno":      matno,
+		"course_list": course_li,
 	})
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
@@ -117,6 +126,40 @@ func LoginStudent(key, password string)bool {
 	}
 }
 
+func GetAllCourses() ([]string, []string){
+	c := &Classes{
+		Courses: []string{},
+		Class_id: []string{},
+	}
+	//Please do not touch anything it doesn't even make sense to me
+	var course_code string
+	var class_iden string
+	var course_outline []string
+	var class_id []string
+	//
+
+	iter := course_list.Documents(ctx)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			fmt.Println(err)
+		}
+		m := doc.Data()
+
+
+		course_code = m["course_code"].(string)
+		c.Courses = append(c.Courses, course_code)
+		course_outline = c.Courses
+
+		class_iden = m["class_id"].(string)
+		c.Class_id = append(c.Class_id, class_iden)
+		class_id = c.Class_id
+	}
+	return course_outline, class_id
+}
 //func GetAllCourses(){
 //
 //}

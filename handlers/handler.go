@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"app/models"
 	"html/template"
 	"log"
 	"net/http"
 )
+
 
 //Registering Login Page
 func Login(w http.ResponseWriter, _ *http.Request) {
@@ -21,5 +23,10 @@ func Register(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	tpl.Execute(w, nil)
+	courses, class_id := models.GetAllCourses()
+	c := &models.Classes{
+				Courses: courses,
+				Class_id: class_id,
+	}
+	tpl.Execute(w, c)
 }

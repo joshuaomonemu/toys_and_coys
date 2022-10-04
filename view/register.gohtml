@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <!-- Mirrored from coderthemes.com/adminto/layouts/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 18 Sep 2022 20:40:00 GMT -->
 <head>
         <meta charset="utf-8" />
@@ -38,7 +38,7 @@
                         <div class="card">
 
                             <div class="card-body p-4">
-                                
+
                                 <div class="text-center mb-4">
                                     <h4 class="text-uppercase mt-0">Register</h4>
                                 </div>
@@ -64,6 +64,17 @@
                                         <label for="level" class="form-label">Level</label>
                                         <input class="form-control" type="text" required id="level" placeholder="Enter your password">
                                     </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                            <label for="selectize-select" class="form-label">Register Courses</label> <br/>
+                                        <select class="form-control" name="course_list" idcm="selectize-select" multiple>
+                                            <option data-display="Select" disabled selected>--None Selected--</option>
+                                            {{range .Courses}}
+                                            <option data-display="Select" value="{{.}}">{{.}}</option>
+                                            {{end}}
+                                        </select>
+                                    </div>
+                                </div>
                                     <div class="mb-3">
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="checkbox-signup">
@@ -106,19 +117,24 @@
         <!-- App js -->
         <script src="assets/js/app.min.js"></script>
         <script>
+
+
             function RegStu(){
                 let fullname = document.getElementById('fullname').value;
                 let password = document.getElementById('password').value;
                 let matno = document.getElementById('matno').value;
                 let level = document.getElementById('level').value;
                 let department = document.getElementById('department').value;
+                let courses = [...document.querySelector("select[name='course_list']").options].filter(option=>!option.disabled && option.selected).map(option=>option.value);
+
+                console.log(courses)
                 let xhttp = new XMLHttpRequest();
 
 
                 xhttp.open("POST", "/api/student/create", true);
                 console.log(this.status);
                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send("fullname=" + fullname + "&password=" + password + "&matno=" + matno + "&level=" + level + "&department=" + department);
+                xhttp.send("fullname=" + fullname + "&password=" + password + "&matno=" + matno + "&level=" + level + "&department=" + department + "&courses=" + courses);
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         let rv = xhttp.getResponseHeader("Created")

@@ -19,9 +19,10 @@ func CreateStudent(w http.ResponseWriter, r *http.Request) {
 	department := r.FormValue("department")
 	password := r.FormValue("password")
 	level := r.FormValue("level")
+	course_list := r.FormValue("courses")
 
 	//Sending data over to modelling page to carry out account creation and return a bool response on completion
-	resp := models.CreateStudent(matno, fullname, department, password, level)
+	resp := models.CreateStudent(matno, fullname, department, password, level, course_list)
 
 	//Sending response to response header
 	if resp == true {
