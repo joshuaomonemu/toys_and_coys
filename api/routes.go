@@ -2,10 +2,8 @@ package api
 
 import (
 	"app/models"
-	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -51,21 +49,24 @@ func ReadStudent(w http.ResponseWriter, r *http.Request){
 	params := mux.Vars(r)
 	id := params["id"]
 	id = strings.Trim(id, "{}")
-	fmt.Println(id)
+
 
 	//Sourcing User Details from Database
-	_, new_sample := models.ReadStudent(id)
-	err := json.Unmarshal(new_sample, &p)
-	if err != nil{
-		log.Fatal("Error unmarshalling JSON")
-	}
-	dept, matno, name, level := string(p.Department), string(p.Matno), string(p.Name), string(p.Level)
-
-	//Sending details as header values
-	w.Header().Set("Department", dept)
-	w.Header().Set("Matriculation Number", matno)
-	w.Header().Set("Name", name)
-	w.Header().Set("Level", level)
+	_, payload := models.ReadStudent(id)
+	fmt.Println(string(payload))
+	//fmt.Fprint(w, string(payload))
+	//io.WriteString(w, payload)
+	//err := json.Unmarshal(new_sample, &p)
+	//if err != nil{
+	//	log.Fatal("Error unmarshalling JSON")
+	//}
+	//dept, matno, name, level := string(p.Department), string(p.Matno), string(p.Name), string(p.Level))
+	//
+	////Sending details as header values
+	//w.Header().Set("Department", dept)
+	//w.Header().Set("Matriculation Number", matno)
+	//w.Header().Set("Name", name)
+	//w.Header().Set("Level", level)
 }
 
 func UpdateStudent(w http.ResponseWriter, r *http.Request){

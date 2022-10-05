@@ -2,6 +2,7 @@ package models
 
 import (
 	database "app/database"
+	"cloud.google.com/go/firestore"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -16,6 +17,7 @@ type Students struct {
 	Level      string `json:"level"`
 	Department string `json:"department"`
 	Password   string `json:"password"`
+	Registry string `json:"registry"`
 }
 
 type Classes struct{
@@ -24,8 +26,10 @@ type Classes struct{
 }
 
 var client = database.CreateClient().Collection("students")
+var registryClient = database.CreateClient().Collection("registry")
 var course_list = database.CreateClient().Collection("courses")
 var ctx = context.Background()
+//var registry *firestore.DocumentRef
 var stu *Students
 
 //Function to create students
@@ -52,28 +56,32 @@ func CreateStudent(matno, fullname, department, password, level, course_list str
 // Function to read students information
 func ReadStudent(key string) (error, []byte) {
 	data, err := client.Doc(key).Get(ctx)
-	if err != nil {
+	m := data.Data()
+	registry := m["registry"].(*firestore.DocumentRef)
+
+	if err == nil {
+		registry_data, registry_err := registryClient.Doc(registry.ID).Get(ctx)
+		registryData := registry_data.Data()
+		fmt.Println(registryData)
+
+		if registry_err == nil{
+			student := &Students{
+				Name: m["name"].(string),
+				Matno: m["matno"].(string),
+				Department: registryData["name"].(string),
+				Level: "400",
+			}
+			payload, _err := json.Marshal(student)
+			if _err != nil{
+				fmt.Println("Error processing student")
+			}
+			return nil, payload
+		} else {
+			return registry_err, nil
+		}
+	} else {
 		return err, nil
 	}
-	m := data.Data()
-	matno := m["matno"].(string)
-	department := m["department"].(string)
-	level := m["level"].(string)
-	name := m["name"].(string)
-	password := m["password"].(string)
-
-	payload := &Students{
-		Matno:      matno,
-		Name:       name,
-		Level:      level,
-		Department: department,
-		Password:   password,
-	}
-	bs, err := json.Marshal(payload)
-	if err != nil {
-		log.Fatalln("Error converting to JSON")
-	}
-	return nil, bs
 }
 
 // Function to delete student
