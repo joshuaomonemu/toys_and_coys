@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -43,10 +44,11 @@ func ReadUser(w http.ResponseWriter, r *http.Request) {
 
 	//Sourcing User Details from Database
 	_, payload := models.ReadUser(id)
-	jsn, _ := json.Marshal(payload)
-
+	jsn, err := json.Marshal(payload)
+	if err != nil {
+		log.Fatal(err)
+	}
 	io.WriteString(w, string(jsn))
-
 }
 
 //func DeleteUser(w http.ResponseWriter, r *http.Request) {

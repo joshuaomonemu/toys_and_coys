@@ -4,7 +4,6 @@ import (
 	database "app/database"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 )
 
@@ -23,7 +22,6 @@ var ctx = context.Background()
 
 // var registry *firestore.DocumentRef
 var usr *Users
-var payload []byte
 
 //Function to create students
 
@@ -44,22 +42,22 @@ func ReadUser(key string) (error, []byte) {
 	data, err := client.Doc(key).Get(ctx)
 	m := data.Data()
 
-	if err == nil {
-		user := &Users{
-			Firstname:    m["firstname"].(string),
-			Lastname:     m["lastname"].(string),
-			Username:     m["username"].(string),
-			Email:        m["email"].(string),
-			Phone_number: m["phone_number"].(string),
-		}
-		payload, err = json.Marshal(user)
-		if err != nil {
-			fmt.Println("Error processing user details")
-		}
-		return err, nil
-	} else {
-		return nil, payload
+	if err != nil {
+		log.Fatal(err)
 	}
+	user := &Users{
+		Firstname:    m["Firstname"].(string),
+		Lastname:     m["Lastname"].(string),
+		Username:     m["Username"].(string),
+		Email:        m["Email"].(string),
+		Phone_number: m["Phone_number"].(string),
+		D_o_b:        m["D_o_b"].(string),
+	}
+	payload, _err := json.Marshal(user)
+	if _err != nil {
+		log.Fatal("Error marshalling json")
+	}
+	return nil, payload
 }
 
 //// Function to delete user
