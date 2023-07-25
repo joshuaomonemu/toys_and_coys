@@ -2,111 +2,104 @@ package api
 
 import (
 	"app/models"
-	"fmt"
+	"encoding/json"
 	"github.com/gorilla/mux"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
 
-var p *models.Students
+var usr *models.Users
 
-func CreateStudent(w http.ResponseWriter, r *http.Request) {
-	//Getting data from filled forms to sedn across to the database
-	matno := r.FormValue("matno")
-	fullname := r.FormValue("fullname")
-	department := r.FormValue("department")
-	password := r.FormValue("password")
-	level := r.FormValue("level")
-	course_list := r.FormValue("courses")
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+	//Getting data
+	// Using json.Unmarshal
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
 
+	err = json.Unmarshal([]byte(body), &usr)
+	if err != nil {
+		panic(err)
+	}
 	//Sending data over to modelling page to carry out account creation and return a bool response on completion
-	resp := models.CreateStudent(matno, fullname, department, password, level, course_list)
+	resp := models.CreateUser(usr)
 
 	//Sending response to response header
 	if resp == true {
-		w.Header().Set("Created", "true")
+		w.WriteHeader(200)
 	} else {
-		w.Header().Set("Created", "False")
+		w.WriteHeader(303)
 	}
 }
 
-func DeleteStudent(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	id := params["id"]
-	//Sanitizing incoming string to prevent error when reading
-	id = strings.Trim(id, "{}")
-	fmt.Println(id)
-	resp := models.DeleteStudent(id)
-	if resp == true {
-		w.Header().Set("Deleted", "True")
-	} else {
-		w.Header().Set("Deleted", "False")
-	}
-}
-
-func ReadStudent(w http.ResponseWriter, r *http.Request){
+func ReadUser(w http.ResponseWriter, r *http.Request) {
 	//Sanitizing incoming string to prevent error when reading and
 	params := mux.Vars(r)
 	id := params["id"]
 	id = strings.Trim(id, "{}")
 
-
 	//Sourcing User Details from Database
-	_, payload := models.ReadStudent(id)
-	fmt.Println(string(payload))
-	//fmt.Fprint(w, string(payload))
-	//io.WriteString(w, payload)
-	//err := json.Unmarshal(new_sample, &p)
-	//if err != nil{
-	//	log.Fatal("Error unmarshalling JSON")
-	//}
-	//dept, matno, name, level := string(p.Department), string(p.Matno), string(p.Name), string(p.Level))
-	//
-	////Sending details as header values
-	//w.Header().Set("Department", dept)
-	//w.Header().Set("Matriculation Number", matno)
-	//w.Header().Set("Name", name)
-	//w.Header().Set("Level", level)
+	_, payload := models.ReadUser(id)
+	jsn, _ := json.Marshal(payload)
+
+	io.WriteString(w, string(jsn))
+
 }
 
-func UpdateStudent(w http.ResponseWriter, r *http.Request){
-	params := mux.Vars(r)
-	id := params["id"]
-	id = strings.Trim(id, "{}")
-	fmt.Println(id)
+//func DeleteUser(w http.ResponseWriter, r *http.Request) {
+//	params := mux.Vars(r)
+//	id := params["id"]
+//	//Sanitizing incoming string to prevent error when reading
+//	id = strings.Trim(id, "{}")
+//	fmt.Println(id)
+//	resp := models.DeleteUser(id)
+//	if resp == true {
+//		w.Header().Set("Deleted", "True")
+//	} else {
+//		w.Header().Set("Deleted", "False")
+//	}
+//}
+//
 
-
-	//Sourcing data from request header
-	dept := w.Header().Get("dept")
-	matno := w.Header().Get("matno")
-	name := w.Header().Get("name")
-	level := w.Header().Get("level")
-
-	//Data Schema for updating students information
-	packed := &models.Students{
-		Level: level,
-		Department: dept,
-		Matno: matno,
-		Name: name,
-	}
-	//Getting response from server to check if update was successful
-	resp := models.UpdateStudent(id, packed)
-	if resp == true{
-	w.Header().Set("update", "complete")
-}else{
-	w.Header().Set("update", "failed")
-	}
-}
-
-
-func LoginStudent(w http.ResponseWriter, r *http.Request){
-	matno := r.FormValue("matno");
-	password := r.FormValue("password")
-
-	resp := models.LoginStudent(matno, password)
-	if resp == true{
-		w.Header().Set("login", "successful")
-	}else{
-		w.Header().Set("login", "failed")
-	}
-}
+//func UpdateUser(w http.ResponseWriter, r *http.Request) {
+//	params := mux.Vars(r)
+//	id := params["id"]
+//	id = strings.Trim(id, "{}")
+//	fmt.Println(id)
+//
+//	//Sourcing data from request header
+//	dept := w.Header().Get("dept")
+//	matno := w.Header().Get("matno")
+//	name := w.Header().Get("name")
+//	level := w.Header().Get("level")
+//
+//	//Data Schema for updating students information
+//	packed := &models.Students{
+//		Level:      level,
+//		Department: dept,
+//		Matno:      matno,
+//		Name:       name,
+//	}
+//	//Getting response from server to check if update was successful
+//	resp := models.UpdateUser(id, packed)
+//	if resp == true {
+//		w.Header().Set("update", "complete")
+//	} else {
+//		w.Header().Set("update", "failed")
+//	}
+//}
+//
+//func LoginUser(w http.ResponseWriter, r *http.Request) {
+//	username := r.FormValue("username")
+//	password := r.FormValue("password")
+//
+//	resp := models.LoginUser(username, password)
+//	if resp == true {
+//		w.Header().Set("login", "successful")
+//	} else {
+//		w.Header().Set("login", "failed")
+//	}
+//}

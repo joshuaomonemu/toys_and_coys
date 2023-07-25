@@ -1,10 +1,19 @@
-package middleware
-
-import "strings"
-
-func CleanStudent(dept string, name string, mat_no string) (string, string, string) {
-	dept = strings.ToLower(dept)
-	name = strings.ToLower(name)
-	mat_no = strings.ToLower(mat_no)
-	return dept, name, mat_no
-}
+//package middleware
+//
+//import "app/models"
+//
+//func (user *models.Users) HashPassword(password string) error {
+//	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+//	if err != nil {
+//		return err
+//	}
+//	user.Password = string(bytes)
+//	return nil
+//}
+//func (user *User) CheckPassword(providedPassword string) error {
+//	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(providedPassword))
+//	if err != nil {
+//		return err
+//	}
+//	return nil
+//}
