@@ -1,8 +1,9 @@
-package api
+ package api
 
 import (
 	"app/models"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
@@ -14,7 +15,7 @@ import (
 var usr *models.Users
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	//Getting data
+	//geting data
 	// Using json.Unmarshal
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -51,48 +52,49 @@ func ReadUser(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(jsn))
 }
 
-//func DeleteUser(w http.ResponseWriter, r *http.Request) {
-//	params := mux.Vars(r)
-//	id := params["id"]
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+id := params["id"]
 //	//Sanitizing incoming string to prevent error when reading
-//	id = strings.Trim(id, "{}")
-//	fmt.Println(id)
-//	resp := models.DeleteUser(id)
-//	if resp == true {
-//		w.Header().Set("Deleted", "True")
-//	} else {
-//		w.Header().Set("Deleted", "False")
-//	}
-//}
-//
+id = strings.Trim(id, "{}")
+fmt.Println(id)
+	resp := models.DeleteUser(id)
+if resp == true {
+	w.Header().Set("Deleted", "True")
+	} else {
+	w.Header().Set("Deleted", "False")
+	}
+}
 
-//func UpdateUser(w http.ResponseWriter, r *http.Request) {
-//	params := mux.Vars(r)
-//	id := params["id"]
-//	id = strings.Trim(id, "{}")
-//	fmt.Println(id)
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+params := mux.Vars(r)
+	id := params["id"]
+id = strings.Trim(id, "{}")
+fmt.Println(id)
 //
 //	//Sourcing data from request header
-//	dept := w.Header().Get("dept")
-//	matno := w.Header().Get("matno")
-//	name := w.Header().Get("name")
-//	level := w.Header().Get("level")
+dept := w.Header().Get("dept")
+	matno := w.Header().Get("matno")
+	name := w.Header().Get("name")
+level := w.Header().Get("level")
 //
 //	//Data Schema for updating students information
-//	packed := &models.Students{
-//		Level:      level,
-//		Department: dept,
-//		Matno:      matno,
-//		Name:       name,
-//	}
+packed := &models.User{
+	Level:      level,
+		Department: dept,
+	Matno:      matno,
+	Name:       name,
+	}
 //	//Getting response from server to check if update was successful
-//	resp := models.UpdateUser(id, packed)
-//	if resp == true {
-//		w.Header().Set("update", "complete")
-//	} else {
-//		w.Header().Set("update", "failed")
-//	}
-//}
+//	resp := model
+//	s.UpdateUser(id, packed)
+	if resp == true {
+	w.Header().Set("update", "complete")
+	} else {
+		w.Header().Set("update", "failed")
+	}
+}
 //
 //func LoginUser(w http.ResponseWriter, r *http.Request) {
 //	username := r.FormValue("username")

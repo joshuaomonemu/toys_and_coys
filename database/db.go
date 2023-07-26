@@ -9,7 +9,7 @@ import (
 	firebase "firebase.google.com/go"
 	"google.golang.org/api/option"
 )
-
+//work
 func CreateClient() *firestore.Client {
 	ctx := context.Background()
 	sa := option.WithCredentialsFile("database/firekey.json")

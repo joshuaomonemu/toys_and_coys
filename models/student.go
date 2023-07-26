@@ -60,33 +60,33 @@ func ReadUser(key string) (error, []byte) {
 	return nil, payload
 }
 
-//// Function to delete user
-//func DeleteUser(key string) bool {
-//	_, err := client.Doc(key).Delete(ctx)
-//	if err != nil {
-//		// Handle any errors in an appropriate way, such as returning them.
-//		log.Printf("An error has occurred: %s", err)
-//		return true
-//	} else {
-//		return false
-//	}
-//}
+// Function to delete user
+func DeleteUser(key string, usr *Users) bool {
+_, err := client.Doc(key).Delete(ctx,user)
+if err != nil {
+	 //Handle any errors in an appropriate way, such as returning them.
+		log.Printf("An error has occurred: %s", err)
+		return true
+	} else {
+		return false
+	}
+}
 //
 //// Function to update user details
-//func UpdateUser(key string, students *Students) bool {
-//	_, err := client.Doc(key).Set(ctx, map[string]interface{}{
-//		"department": students.Department,
-//		"level":      students.Level,
-//		"name":       students.Name,
-//		"matno":      students.Matno,
-//	})
-//	if err != nil {
-//		log.Printf("An error has occurred: %s", err)
-//		return false
-//	}
-//	return true
-//}
-//
+func UpdateUser(key string, usr *Users) bool {
+_, err := client.Doc(key).Set(ctx, map[string]interface{}{
+	"department": Users.Department,
+		"level":      Users.Level,
+	"name":       Users.Name,
+	"matno":      Users.Matno,
+	} )
+	if err != nil {
+	log.Printf("An error has oc	curred: %s", err)
+		return false
+	}
+	return true
+}
+
 //func LoginUser(key, password string) bool {
 //	var x map[string]interface{}
 //	query := client.Where("matno", "==", key).Where("password", "==", password).Documents(ctx)
@@ -95,7 +95,7 @@ func ReadUser(key string) (error, []byte) {
 //		if err == iterator.Done {
 //			break
 //		}
-//		//Ignoring error handling on testing phase
+//		//Ignoring error handling on tezting phase
 //		//if err != nil{
 //		//	fmt.Println(err)
 //		//}
