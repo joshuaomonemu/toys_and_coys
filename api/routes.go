@@ -15,7 +15,7 @@ import (
 var usr *models.Users
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	//geting data
+	//geting datas
 	// Using json.Unmarshal
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

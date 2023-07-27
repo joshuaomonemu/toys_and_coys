@@ -13,7 +13,7 @@ var r = mux.NewRouter()
 func Routes() {
 	//Starting Server and running on port 2020
 
-	// Api for Users
+	// Api for User
 	//r.HandleFunc("/api/user/get{id}", api.GetUser).Methods("GET")
 	port := "2020"
 

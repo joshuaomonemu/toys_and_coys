@@ -72,7 +72,7 @@ if err != nil {
 	}
 }
 //
-//// Function to update user details
+//// Function to update user detail
 func UpdateUser(key string, usr *Users) bool {
 _, err := client.Doc(key).Set(ctx, map[string]interface{}{
 	"department": Users.Department,
