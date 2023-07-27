@@ -32,7 +32,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if resp == true {
 		w.WriteHeader(200)
 	} else {
-		w.WriteHeader(303)
+		w.WriteHeader(301)
 	}
 }
 
