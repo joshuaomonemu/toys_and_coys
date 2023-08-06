@@ -2,33 +2,24 @@ package models
 
 import (
 	database "app/database"
+	"app/structs"
+	"cloud.google.com/go/firestore"
 	"context"
-	"encoding/json"
 	"log"
 )
 
-type Users struct {
-	Firstname    string `json:"firstname"`
-	Lastname     string `json:"lastname"`
-	Email        string `json:"email"`
-	Phone_number string `json:"phone_number"`
-	Password     string `json:"password"`
-	D_o_b        string `json:"d_o_b"`
-	Username     string `json:"username"`
-}
-
-var client = database.CreateClient().Collection("users")
+var client = database.CreateClient()
 var ctx = context.Background()
 
 // var registry *firestore.DocumentRef
-var usr *Users
+var usr *structs.Users
 
 //Function to create students
 
-func CreateUser(usr *Users) bool {
+func CreateUser(usr *structs.Users) bool {
 	//Cleaning data for user registration
 	//course_li := strings.SplitAfter(course_list, ",")
-	_, err := client.Doc(usr.Username).Create(ctx, usr)
+	_, err := client.Collection("users").Doc(usr.Username).Create(ctx, usr)
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
 		log.Printf("An error has occurred: %s", err)
@@ -38,54 +29,45 @@ func CreateUser(usr *Users) bool {
 }
 
 // Function to read user information
-func ReadUser(key string) (error, []byte) {
-	data, err := client.Doc(key).Get(ctx)
-	m := data.Data()
-
+func ReadUser(key string) (error, map[string]interface{}) {
+	data, err := client.Collection("users").Doc(key).Get(ctx)
+	m = data.Data()
 	if err != nil {
-		log.Fatal(err)
+		err1 := err
+		return err1, m
+	} else {
+		var err1 error
+		return err1, m
 	}
-	user := &Users{
-		Firstname:    m["Firstname"].(string),
-		Lastname:     m["Lastname"].(string),
-		Username:     m["Username"].(string),
-		Email:        m["Email"].(string),
-		Phone_number: m["Phone_number"].(string),
-		D_o_b:        m["D_o_b"].(string),
-	}
-	payload, _err := json.Marshal(user)
-	if _err != nil {
-		log.Fatal("Error marshalling json")
-	}
-	return nil, payload
 }
 
-//// Function to delete user
-//func DeleteUser(key string) bool {
-//	_, err := client.Doc(key).Delete(ctx)
-//	if err != nil {
-//		// Handle any errors in an appropriate way, such as returning them.
-//		log.Printf("An error has occurred: %s", err)
-//		return true
-//	} else {
-//		return false
-//	}
-//}
-//
-//// Function to update user details
-//func UpdateUser(key string, students *Students) bool {
-//	_, err := client.Doc(key).Set(ctx, map[string]interface{}{
-//		"department": students.Department,
-//		"level":      students.Level,
-//		"name":       students.Name,
-//		"matno":      students.Matno,
-//	})
-//	if err != nil {
-//		log.Printf("An error has occurred: %s", err)
-//		return false
-//	}
-//	return true
-//}
+// Function to delete user
+func DeleteUser(key string) bool {
+	_, err := client.Collection("users").Doc(key).Delete(ctx)
+	if err != nil {
+		// Handle any errors in an appropriate way, such as returning them.
+		log.Printf("An error has occurred: %s", err)
+		return true
+	} else {
+		return false
+	}
+}
+
+// Function to update user details
+func UpdateUser(key string, usr *structs.Users) bool {
+	_, err := client.Doc(key).Set(ctx, map[string]interface{}{
+		"phone_number": usr.Phone_number,
+		"email":        usr.Email,
+		"firstname":    usr.Firstname,
+		"lastname":     usr.Lastname,
+	}, firestore.MergeAll)
+	if err != nil {
+		log.Printf("An error has occurred: %s", err)
+		return false
+	}
+	return true
+}
+
 //
 //func LoginUser(key, password string) bool {
 //	var x map[string]interface{}

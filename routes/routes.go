@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"app/api"
+	"app/controller"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -14,17 +14,18 @@ func Routes() {
 	//Starting Server and running on port 2020
 
 	// Api for User
-	//r.HandleFunc("/api/user/get{id}", api.GetUser).Methods("GET")
+	//r.HandleFunc("/controller/user/get{id}", controller.GetUser).Methods("GET")
 	port := "2020"
 
-	//Endpoints and Routepoints for users
-	r.HandleFunc("/api/user/create", api.CreateUser).Methods("POST")
-	//r.HandleFunc("/api/user/delete/{id}", api.DeleteUser).Methods("GET")
-	r.HandleFunc("/api/user/get/{id}", api.ReadUser).Methods("GET")
-	//r.HandleFunc("/api/user/login", api.LoginUser).Methods("POST")
-	//r.HandleFunc("/api/user/update/{id}", api.UpdateUser).Methods("POST")
+	//Endpoints and Route points for users
+	r.HandleFunc("/user/create", controller.CreateUser).Methods("POST")
+	r.HandleFunc("/user/delete/{id}", controller.DeleteUser).Methods("DELETE")
+	r.HandleFunc("/user/get/{id}", controller.ReadUser).Methods("GET")
+	r.HandleFunc("/user/update/{id}", controller.UpdateUser).Methods("PATCH")
 
-	//Routepoints and endpoints for events
-
+	//Route points and endpoints for events
+	r.HandleFunc("/events/create", controller.CreateEvent).Methods("POST")
+	r.HandleFunc("/events/delete/{id}", controller.DeleteEvent).Methods("DELETE")
+	r.HandleFunc("/events/get/{id}", controller.ReadEvent).Methods("GET")
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }

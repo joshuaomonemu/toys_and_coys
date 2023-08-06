@@ -3,7 +3,6 @@ package helper
 import (
 	"encoding/binary"
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/rand"
 	"time"
@@ -24,5 +23,5 @@ func Randoms() string {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(s))
+	return string(s)
 }
