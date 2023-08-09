@@ -9,63 +9,40 @@ import (
 )
 
 var po = database.CreateClient()
-var err_arr []string
 var m map[string]interface{}
-var epayload *structs.EventPayload
 
-func CreateEvent(event *structs.Events) bool {
+func CreateEvent(event *structs.Events) (error, string) {
 	post_val := "post-" + fmt.Sprintln(rand.Intn(999999))
 
-	_, err := po.Collection("events").Doc(post_val).Create(ctx, event)
-	if err != nil {
+	res, err1 := po.Collection("events").Doc(post_val).Create(ctx, usr)
+	if err1 != nil {
 		// Handle any errors in an appropriate way, such as returning them.
-		log.Printf("An error has occurred: %s", err)
-		return false
+		log.Printf("An error has occurred: %s", err1)
+		return err1, ""
 	}
-	return true
+	return err1, res.UpdateTime.GoString()
 }
 
 // Function to read events
-func ReadEvent(key string) *structs.EventPayload {
+func ReadEvent(key string) (error, map[string]interface{}) {
 	data, err := po.Collection("events").Doc(key).Get(ctx)
 	m = data.Data()
 	if err != nil {
-		err1 := err.Error()
-		err_arr = append(err_arr, err1)
-
-		epayload = &structs.EventPayload{
-			Succeeded: false,
-			Errors:    []string(err_arr),
-		}
+		err1 := err
+		return err1, m
 	} else {
-		epayload = &structs.EventPayload{
-			Succeeded: true,
-			Data: structs.Events{
-				User:    m["User"].(string),
-				Content: m["Content"].(string),
-				Text:    m["Text"].(string),
-				Time:    m["Time"].(string),
-				Likes:   m["Likes"].(int64),
-				Comments: structs.EventComment{
-					User:    m["Comments"].(map[string]interface{})["User"].(string),
-					Comment: m["Comments"].(map[string]interface{})["Comment"].(string),
-					Time:    m["Comments"].(map[string]interface{})["Time"].(string),
-				},
-			},
-			Errors: []string(err_arr),
-		}
+		var err1 error
+		return err1, m
 	}
-	return epayload
 }
 
 // Function to delete an event
-func DeleteEvent(key string) bool {
+func DeleteEvent(key string) error {
 	_, err := po.Collection("events").Doc(key).Delete(ctx)
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
 		log.Printf("An error has occurred: %s", err)
-		return true
-	} else {
-		return false
+		return err
 	}
+	return err
 }

@@ -9,44 +9,79 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 )
 
-var event *structs.Events
-
 func CreateEvent(w http.ResponseWriter, r *http.Request) {
+
+	var event *structs.Events
+	var epayload *structs.EventPayload
+
 	//Getting data
 	// Using json.Unmarshal
 	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		panic(err)
-	}
 
 	err = json.Unmarshal([]byte(body), &event)
 	if err != nil {
 		panic(err)
 	}
 	//Sending data over to modelling page to carry out account creation and return a bool response on completion
-	resp := models.CreateEvent(event)
+	err1, resp := models.CreateEvent(event)
 
-	//Sending response to response header
-	if resp == true {
-		w.WriteHeader(200)
-		w.Header().Add("success", "true")
+	if err1 != nil {
+		epayload = &structs.EventPayload{
+			Succeeded: false,
+			Errors:    err1,
+			Message:   "Event could not be created",
+		}
 	} else {
-		w.WriteHeader(303)
-		w.Header().Add("success", "false")
+		epayload = &structs.EventPayload{
+			Succeeded: true,
+			Data: structs.Events{
+				User:    event.User,
+				Content: event.Content,
+				Text:    event.Text,
+				Time:    event.Time,
+				Likes:   event.Likes,
+			},
+			Errors:  nil,
+			Message: "User account created at " + resp,
+		}
 	}
+	jsn, err := json.Marshal(epayload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	io.WriteString(w, string(jsn))
 }
 
 func ReadEvent(w http.ResponseWriter, r *http.Request) {
-	//Sanitizing incoming string to prevent error when reading and
+	var epayload *structs.EventPayload
+
 	params := mux.Vars(r)
 	id := params["id"]
 
-	//Sourcing User Details from Database
-	payload := models.ReadEvent(id)
-	jsn, err := json.Marshal(payload)
+	err, m := models.ReadEvent(id)
+
+	if err != nil {
+		epayload = &structs.EventPayload{
+			Succeeded: false,
+			Errors:    err,
+		}
+
+	} else {
+		epayload = &structs.EventPayload{
+			Succeeded: true,
+			Data: structs.Events{
+				User:    m["User"].(string),
+				Content: m["Content"].(string),
+				Text:    m["Text"].(string),
+				Time:    m["Time"].(string),
+				Likes:   m["Likes"].(int64),
+			},
+			Errors: nil,
+		}
+	}
+	jsn, err := json.Marshal(epayload)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,15 +89,28 @@ func ReadEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteEvent(w http.ResponseWriter, r *http.Request) {
+	var epayload *structs.EventPayload
 	params := mux.Vars(r)
 	id := params["id"]
-	id = strings.Trim(id, "{}")
-	resp := models.DeleteEvent(id)
-	if resp == true {
-		w.WriteHeader(200)
-		w.Header().Set("Deleted", "True")
+
+	err := models.DeleteEvent(id)
+	if err != nil {
+		epayload = &structs.EventPayload{
+			Succeeded: false,
+			Errors:    err,
+			Message:   "This event could not be deleted",
+		}
 	} else {
-		w.WriteHeader(417)
-		w.Header().Set("Deleted", "False")
+		epayload = &structs.EventPayload{
+			Succeeded: true,
+			Errors:    err,
+			Message:   "This event has been deleted",
+		}
 	}
+
+	jsn, err := json.Marshal(epayload)
+	if err != nil {
+		log.Fatal(err)
+	}
+	io.WriteString(w, string(jsn))
 }

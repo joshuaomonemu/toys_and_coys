@@ -12,12 +12,11 @@ type Users struct {
 }
 
 type Events struct {
-	User     string       `json:"user"`
-	Content  string       `json:"content"`
-	Text     string       `json:"text"`
-	Time     string       `json:"time"`
-	Likes    int64        `json:"likes"`
-	Comments EventComment `json:"Comments"`
+	User    string `json:"user"`
+	Content string `json:"content"`
+	Text    string `json:"text"`
+	Time    string `json:"time"`
+	Likes   int64  `json:"likes"`
 }
 
 type EventComment struct {
@@ -27,15 +26,21 @@ type EventComment struct {
 }
 
 type EventPayload struct {
-	Succeeded bool     `json:"succeeded"`
-	Data      Events   `json:"data"`
-	Errors    []string `json:"error"`
-	Message   string   `json:"message"`
+	Succeeded bool   `json:"succeeded"`
+	Data      Events `json:"data"`
+	Errors    error  `json:"error"`
+	Message   string `json:"message"`
 }
 
 type UserPayload struct {
 	Succeeded bool   `json:"succeeded"`
 	Data      Users  `json:"data"`
+	Errors    error  `json:"errors"`
+	Message   string `json:"message"`
+}
+
+type MinUserPayload struct {
+	Succeeded bool   `json:"succeeded"`
 	Errors    error  `json:"errors"`
 	Message   string `json:"message"`
 }

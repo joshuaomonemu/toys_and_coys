@@ -16,16 +16,16 @@ var usr *structs.Users
 
 //Function to create students
 
-func CreateUser(usr *structs.Users) bool {
+func CreateUser(usr *structs.Users) (error, string) {
 	//Cleaning data for user registration
 	//course_li := strings.SplitAfter(course_list, ",")
-	_, err := client.Collection("users").Doc(usr.Username).Create(ctx, usr)
-	if err != nil {
+	res, err1 := client.Collection("users").Doc(usr.Username).Create(ctx, usr)
+	if err1 != nil {
 		// Handle any errors in an appropriate way, such as returning them.
-		log.Printf("An error has occurred: %s", err)
-		return false
+		log.Printf("An error has occurred: %s", err1)
+		return err1, ""
 	}
-	return true
+	return err1, res.UpdateTime.GoString()
 }
 
 // Function to read user information
@@ -42,15 +42,14 @@ func ReadUser(key string) (error, map[string]interface{}) {
 }
 
 // Function to delete user
-func DeleteUser(key string) bool {
+func DeleteUser(key string) error {
 	_, err := client.Collection("users").Doc(key).Delete(ctx)
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
 		log.Printf("An error has occurred: %s", err)
-		return true
-	} else {
-		return false
+		return err
 	}
+	return err
 }
 
 // Function to update user details
