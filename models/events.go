@@ -14,7 +14,7 @@ var m map[string]interface{}
 func CreateEvent(event *structs.Events) (error, string) {
 	post_val := "post-" + fmt.Sprintln(rand.Intn(999999))
 
-	res, err1 := po.Collection("events").Doc(post_val).Create(ctx, usr)
+	res, err1 := po.Collection("events").Doc(post_val).Create(ctx, event)
 	if err1 != nil {
 		// Handle any errors in an appropriate way, such as returning them.
 		log.Printf("An error has occurred: %s", err1)

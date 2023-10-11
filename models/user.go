@@ -17,8 +17,6 @@ var usr *structs.Users
 //Function to create students
 
 func CreateUser(usr *structs.Users) (error, string) {
-	//Cleaning data for user registration
-	//course_li := strings.SplitAfter(course_list, ",")
 	res, err1 := client.Collection("users").Doc(usr.Username).Create(ctx, usr)
 	if err1 != nil {
 		// Handle any errors in an appropriate way, such as returning them.

@@ -1,5 +1,7 @@
 package structs
 
+import "cloud.google.com/go/firestore"
+
 type Users struct {
 	Firstname    string   `json:"firstname"`
 	Lastname     string   `json:"lastname"`
@@ -12,6 +14,7 @@ type Users struct {
 }
 
 type Events struct {
+	Title   string `json:"title"`
 	User    string `json:"user"`
 	Content string `json:"content"`
 	Text    string `json:"text"`
@@ -20,9 +23,10 @@ type Events struct {
 }
 
 type EventComment struct {
-	User    string `json:"user"`
-	Comment string `json:"comment"`
-	Time    string `json:"time"`
+	Ref     firestore.DocumentRef `json:"ref"`
+	User    string                `json:"user"`
+	Comment string                `json:"comment"`
+	Time    string                `json:"time"`
 }
 
 type EventPayload struct {
@@ -30,6 +34,13 @@ type EventPayload struct {
 	Data      Events `json:"data"`
 	Errors    error  `json:"error"`
 	Message   string `json:"message"`
+}
+
+type CommentPayload struct {
+	Succeeded bool         `json:"succeeded"`
+	Data      EventComment `json:"data"`
+	Errors    error        `json:"error"`
+	Message   string       `json:"message"`
 }
 
 type UserPayload struct {

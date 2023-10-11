@@ -1,12 +1,14 @@
 package main
 
 import (
+	"app/mailer"
 	"app/routes"
 	"fmt"
 )
 
 func main() {
-	fmt.Println("Project starts here")
+	fmt.Println("SERVING AT PORT 2020")
+	mailer.Mailer()
 
 	routes.Routes()
 }

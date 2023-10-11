@@ -4,13 +4,21 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ef4619c9-c14b-4c3b-93b6-4c46920feddc" name="Changes" comment="working on event routepoints">
+    <list default="true" id="ef4619c9-c14b-4c3b-93b6-4c46920feddc" name="Changes" comment="REFACTORING">
+      <change afterPath="$PROJECT_DIR$/controller/events.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailer/reg_mail.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/comments.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/comments.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/comments.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/comment.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/events.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/structs/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/structs/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/modules.txt" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/modules.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +57,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ovoke/Documents/konnect&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Ovoke/Videos/tester&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
@@ -94,7 +102,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="restructuring data schema and data structure." />
     <MESSAGE value="working on event routepoints" />
-    <option name="LAST_COMMIT_MESSAGE" value="working on event routepoints" />
+    <MESSAGE value="REFACTORING" />
+    <option name="LAST_COMMIT_MESSAGE" value="REFACTORING" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
@@ -106,6 +115,11 @@
           <url>file://$PROJECT_DIR$/controller/user.go</url>
           <line>139</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/controller/user.go</url>
+          <line>122</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -143,16 +143,3 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("update", "failed")
 	}
 }
-
-//
-//func LoginUser(w http.ResponseWriter, r *http.Request) {
-//	username := r.FormValue("username")
-//	password := r.FormValue("password")
-//
-//	resp := models.LoginUser(username, password)
-//	if resp == true {
-//		w.Header().Set("login", "successful")
-//	} else {
-//		w.Header().Set("login", "failed")
-//	}
-//}

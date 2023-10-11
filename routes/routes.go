@@ -9,13 +9,14 @@ import (
 
 // Starting route points
 var r = mux.NewRouter()
+var port string
 
 func Routes() {
 	//Starting Server and running on port 2020
 
 	// Api for User
 	//r.HandleFunc("/controller/user/get{id}", controller.GetUser).Methods("GET")
-	port := "2020"
+	port = "2020"
 
 	//Endpoints and Route points for users
 	r.HandleFunc("/user/create", controller.CreateUser).Methods("POST")
@@ -27,5 +28,7 @@ func Routes() {
 	r.HandleFunc("/events/create", controller.CreateEvent).Methods("POST")
 	r.HandleFunc("/events/delete/{id}", controller.DeleteEvent).Methods("DELETE")
 	r.HandleFunc("/events/get/{id}", controller.ReadEvent).Methods("GET")
+
+	r.HandleFunc("/events/comment/{id}", controller.CreateComment).Methods("POST")
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
