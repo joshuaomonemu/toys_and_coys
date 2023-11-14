@@ -29,6 +29,6 @@ func Routes() {
 	r.HandleFunc("/events/delete/{id}", controller.DeleteEvent).Methods("DELETE")
 	r.HandleFunc("/events/get/{id}", controller.ReadEvent).Methods("GET")
 
-	r.HandleFunc("/events/comment/{id}", controller.CreateComment).Methods("POST")
+	r.HandleFunc("/comment/create/{id}", controller.CreateComment).Methods("POST")
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }

@@ -4,6 +4,7 @@ import (
 	"app/models"
 	"app/structs"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
@@ -28,13 +29,13 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 	}
 	//Sending data over to modelling page to carry out account creation and return a bool response on completion
 	err, resp := models.CreateComment(id, event)
-
 	if err != nil {
 		cpayload = &structs.CommentPayload{
 			Succeeded: false,
 			Errors:    err,
 			Message:   "Error Occurred when commenting",
 		}
+		fmt.Println(cpayload)
 	} else {
 		cpayload = &structs.CommentPayload{
 			Succeeded: true,

@@ -1,32 +1,30 @@
 package structs
 
-import "cloud.google.com/go/firestore"
-
 type Users struct {
-	Firstname    string   `json:"firstname"`
-	Lastname     string   `json:"lastname"`
-	Email        string   `json:"email"`
-	Phone_number string   `json:"phone_number"`
-	Password     string   `json:"password"`
-	D_o_b        string   `json:"d_o_b"`
-	Username     string   `json:"username"`
-	Event        []string `json:"event"`
+	Firstname    string `json:"firstname"`
+	Lastname     string `json:"lastname"`
+	Email        string `json:"email"`
+	Phone_number string `json:"phone_number"`
+	Password     string `json:"password"`
+	D_o_b        string `json:"d_o_b"`
+	Username     string `json:"username"`
 }
 
 type Events struct {
-	Title   string `json:"title"`
-	User    string `json:"user"`
-	Content string `json:"content"`
-	Text    string `json:"text"`
-	Time    string `json:"time"`
-	Likes   int64  `json:"likes"`
+	Title    string `json:"title"`
+	User     string `json:"user"`
+	Content  string `json:"content"`
+	Text     string `json:"text"`
+	Time     string `json:"time"`
+	Likes    int64  `json:"likes"`
+	Event_id string `json:"event_id"`
 }
 
 type EventComment struct {
-	Ref     firestore.DocumentRef `json:"ref"`
-	User    string                `json:"user"`
-	Comment string                `json:"comment"`
-	Time    string                `json:"time"`
+	//Ref     firestore.DocumentRef `json:"ref"`
+	User    string `json:"user"`
+	Comment string `json:"comment"`
+	Time    string `json:"time"`
 }
 
 type EventPayload struct {
