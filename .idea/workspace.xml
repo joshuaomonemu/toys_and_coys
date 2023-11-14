@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ef4619c9-c14b-4c3b-93b6-4c46920feddc" name="Changes" comment="REFACTORING">
+    <list default="true" id="ef4619c9-c14b-4c3b-93b6-4c46920feddc" name="Changes" comment="commenting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/comments.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/comments.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/database/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/firekey.json" beforeDir="false" afterPath="$PROJECT_DIR$/database/firekey.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/comments.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/comments.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/routes.go" beforeDir="false" afterPath="$PROJECT_DIR$/routes/routes.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/structs/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/structs/struct.go" afterDir="false" />
     </list>
@@ -99,7 +94,8 @@
     <MESSAGE value="restructuring data schema and data structure." />
     <MESSAGE value="working on event routepoints" />
     <MESSAGE value="REFACTORING" />
-    <option name="LAST_COMMIT_MESSAGE" value="REFACTORING" />
+    <MESSAGE value="commenting" />
+    <option name="LAST_COMMIT_MESSAGE" value="commenting" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

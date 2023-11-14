@@ -1,5 +1,7 @@
 package structs
 
+import "time"
+
 type Users struct {
 	Firstname    string `json:"firstname"`
 	Lastname     string `json:"lastname"`
@@ -21,10 +23,10 @@ type Events struct {
 }
 
 type EventComment struct {
-	//Ref     firestore.DocumentRef `json:"ref"`
-	User    string `json:"user"`
-	Comment string `json:"comment"`
-	Time    string `json:"time"`
+	Commentid string    `json:"commentid"`
+	User      string    `json:"user"`
+	Comment   string    `json:"comment"`
+	Time      time.Time `json:"time"`
 }
 
 type EventPayload struct {
@@ -35,10 +37,10 @@ type EventPayload struct {
 }
 
 type CommentPayload struct {
-	Succeeded bool         `json:"succeeded"`
-	Data      EventComment `json:"data"`
-	Errors    error        `json:"error"`
-	Message   string       `json:"message"`
+	Succeeded bool           `json:"succeeded"`
+	Data      []EventComment `json:"data"`
+	Errors    error          `json:"error"`
+	Message   string         `json:"message"`
 }
 
 type UserPayload struct {

@@ -30,5 +30,7 @@ func Routes() {
 	r.HandleFunc("/events/get/{id}", controller.ReadEvent).Methods("GET")
 
 	r.HandleFunc("/comment/create/{id}", controller.CreateComment).Methods("POST")
+	r.HandleFunc("/comment/delete/{id}", controller.DeleteComment).Methods("DELETE")
+	r.HandleFunc("/comments/getall", controller.GetallComments).Methods("GET")
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
