@@ -30,28 +30,28 @@ type EventComment struct {
 }
 
 type EventPayload struct {
-	Succeeded bool   `json:"succeeded"`
-	Data      Events `json:"data"`
-	Errors    error  `json:"error"`
-	Message   string `json:"message"`
+	Success bool   `json:"success"`
+	Data    Events `json:"data"`
+	Errors  string `json:"error"`
+	Message string `json:"message"`
 }
 
 type CommentPayload struct {
-	Succeeded bool           `json:"succeeded"`
-	Data      []EventComment `json:"data"`
-	Errors    error          `json:"error"`
-	Message   string         `json:"message"`
+	Success bool           `json:"success"`
+	Data    []EventComment `json:"data"`
+	Errors  string         `json:"error"`
+	Message string         `json:"message"`
 }
 
 type UserPayload struct {
-	Succeeded bool   `json:"succeeded"`
-	Data      Users  `json:"data"`
-	Errors    error  `json:"errors"`
-	Message   string `json:"message"`
+	Success bool   `json:"success"`
+	Data    Users  `json:"data"`
+	Errors  string `json:"errors"`
+	Message string `json:"message"`
 }
 
 type MinUserPayload struct {
-	Succeeded bool   `json:"succeeded"`
-	Errors    error  `json:"errors"`
-	Message   string `json:"message"`
+	Success bool   `json:"success"`
+	Errors  error  `json:"errors"`
+	Message string `json:"message"`
 }

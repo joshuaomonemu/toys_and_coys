@@ -31,16 +31,15 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 	err, _ = models.CreateComment(id, event)
 	if err != nil {
 		cpayload = &structs.CommentPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "Error Occurred when commenting",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "Error Occurred when commenting",
 		}
 		fmt.Println(cpayload)
 	} else {
 		cpayload = &structs.CommentPayload{
-			Succeeded: true,
-			Errors:    nil,
-			Message:   "Commented on event",
+			Success: true,
+			Message: "Commented on event",
 		}
 	}
 	jsn, err := json.Marshal(cpayload)
@@ -59,15 +58,14 @@ func DeleteComment(w http.ResponseWriter, r *http.Request) {
 	err := models.DeleteComment(id)
 	if err != nil {
 		cpayload = &structs.CommentPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "This comment could not be deleted",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "This comment could not be deleted",
 		}
 	} else {
 		cpayload = &structs.CommentPayload{
-			Succeeded: true,
-			Errors:    err,
-			Message:   "This comment has been deleted",
+			Success: true,
+			Message: "This comment has been deleted",
 		}
 	}
 
@@ -78,22 +76,24 @@ func DeleteComment(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(jsn))
 }
 
-func GetallComments(w http.ResponseWriter) {
+func GetallComments(w http.ResponseWriter, r *http.Request) {
+	CT := r.Header.Get("Content-Type")
+	fmt.Println(CT)
+
 	var cpayload *structs.CommentPayload
 
 	data, err := models.GetallComments()
 	if err != nil {
 		cpayload = &structs.CommentPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "Couldn't trace any comments",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "Couldn't trace any comments",
 		}
 	} else {
 		cpayload = &structs.CommentPayload{
-			Succeeded: true,
-			Data:      data,
-			Errors:    err,
-			Message:   "This comment has been deleted",
+			Success: true,
+			Data:    data,
+			Message: "This comment has been deleted",
 		}
 	}
 

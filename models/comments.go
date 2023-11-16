@@ -81,9 +81,4 @@ func GetallComments() ([]structs.EventComment, error) {
 	}
 
 	return comments, nil
-	//// Now 'students' contains the data from Firestore in the form of a slice of structs
-	//fmt.Printf("Number of students: %d\n", len(students))
-	//for _, s := range students {
-	//	fmt.Printf("Name: %s, Age: %d, Major: %s\n", s.Name, s.Age, s.Major)
-	//}
 }

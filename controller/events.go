@@ -29,13 +29,13 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		epayload = &structs.EventPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "Event could not be created",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "Event could not be created",
 		}
 	} else {
 		epayload = &structs.EventPayload{
-			Succeeded: true,
+			Success: true,
 			Data: structs.Events{
 				Title:   event.Title,
 				User:    event.User,
@@ -44,7 +44,6 @@ func CreateEvent(w http.ResponseWriter, r *http.Request) {
 				Time:    event.Time,
 				Likes:   event.Likes,
 			},
-			Errors:  nil,
 			Message: "Event created at " + resp,
 		}
 	}
@@ -65,13 +64,13 @@ func ReadEvent(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		epayload = &structs.EventPayload{
-			Succeeded: false,
-			Errors:    err,
+			Success: false,
+			Errors:  err.Error(),
 		}
 
 	} else {
 		epayload = &structs.EventPayload{
-			Succeeded: true,
+			Success: true,
 			Data: structs.Events{
 				User:    m["User"].(string),
 				Content: m["Content"].(string),
@@ -80,7 +79,6 @@ func ReadEvent(w http.ResponseWriter, r *http.Request) {
 				Likes:   m["Likes"].(int64),
 				Title:   m["title"].(string),
 			},
-			Errors: nil,
 		}
 	}
 	jsn, err := json.Marshal(epayload)
@@ -98,15 +96,14 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	err := models.DeleteEvent(id)
 	if err != nil {
 		epayload = &structs.EventPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "This event could not be deleted",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "This event could not be deleted",
 		}
 	} else {
 		epayload = &structs.EventPayload{
-			Succeeded: true,
-			Errors:    err,
-			Message:   "This event has been deleted",
+			Success: true,
+			Message: "This event has been deleted",
 		}
 	}
 

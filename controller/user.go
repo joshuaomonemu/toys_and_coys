@@ -24,17 +24,17 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	//Sending data over to modelling page to carry out account creation and return a bool response on completion
-	err1, resp := models.CreateUser(usr)
+	err, resp := models.CreateUser(usr)
 
-	if err1 != nil {
+	if err != nil {
 		upayload = &structs.UserPayload{
-			Succeeded: false,
-			Errors:    err1,
-			Message:   "User account could not be created",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "User account could not be created",
 		}
 	} else {
 		upayload = &structs.UserPayload{
-			Succeeded: true,
+			Success: true,
 			Data: structs.Users{
 				Firstname:    usr.Firstname,
 				Lastname:     usr.Lastname,
@@ -43,7 +43,6 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 				Phone_number: usr.Phone_number,
 				D_o_b:        usr.D_o_b,
 			},
-			Errors:  nil,
 			Message: "User account created at " + resp,
 		}
 	}
@@ -65,14 +64,14 @@ func ReadUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		upayload = &structs.UserPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "User account could not be read",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "User account could not be read",
 		}
 
 	} else {
 		upayload = &structs.UserPayload{
-			Succeeded: true,
+			Success: true,
 			Data: structs.Users{
 				Firstname:    m["Firstname"].(string),
 				Lastname:     m["Lastname"].(string),
@@ -81,7 +80,6 @@ func ReadUser(w http.ResponseWriter, r *http.Request) {
 				Phone_number: m["Phone_number"].(string),
 				D_o_b:        m["D_o_b"].(string),
 			},
-			Errors:  nil,
 			Message: "User data printed successfully",
 		}
 	}
@@ -101,15 +99,14 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	err := models.DeleteUser(id)
 	if err != nil {
 		upayload = &structs.UserPayload{
-			Succeeded: false,
-			Errors:    err,
-			Message:   "User account could not be deleted",
+			Success: false,
+			Errors:  err.Error(),
+			Message: "User account could not be deleted",
 		}
 	} else {
 		upayload = &structs.UserPayload{
-			Succeeded: true,
-			Errors:    err,
-			Message:   "User account deleted",
+			Success: true,
+			Message: "User account deleted",
 		}
 	}
 
