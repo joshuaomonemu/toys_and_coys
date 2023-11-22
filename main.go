@@ -7,6 +7,5 @@ import (
 
 func main() {
 	fmt.Println("SERVING AT PORT 2020")
-
 	routes.Routes()
 }

@@ -4,6 +4,7 @@ import (
 	"app/models"
 	"app/structs"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
@@ -139,4 +140,10 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Header().Set("update", "failed")
 	}
+}
+
+func Index(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "welcome to the bank")
+	request_type := r.Method
+	fmt.Println(request_type)
 }
