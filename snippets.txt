@@ -1,42 +1,108 @@
-var p *models.Students
+package main
+
+import (
+	"fmt"
+	"sort"
+	"time"
+)
+
+// Post represents a social media post.
+type Post struct {
+	ID        int
+	UserID    int
+	Content   string
+	Timestamp time.Time
+}
+
+// UserInteraction represents user interactions with posts.
+type UserInteraction struct {
+	UserID   int
+	PostID   int
+	Like     bool
+	Comment  bool
+	Share    bool
+	Bookmark bool
+	Timestamp time.Time
+}
+
+// Feed represents a user's social media feed.
+type Feed struct {
+	UserID       int
+	PostIDs      []int
+	PostMap      map[int]Post
+	Interactions []UserInteraction
+}
+
+// NewFeed creates a new user feed.
+func NewFeed(userID int, posts []Post, interactions []UserInteraction) *Feed {
+	// Initialize a map to store posts by their IDs
+	postMap := make(map[int]Post)
+	// Create a slice to store post IDs
+	postIDs := make([]int, len(posts))
+
+	// Populate the post map and post IDs slice
+	for i, post := range posts {
+		postMap[post.ID] = post
+		postIDs[i] = post.ID
+	}
+
+	// Create a new Feed instance
+	return &Feed{
+		UserID:       userID,
+		PostIDs:      postIDs,
+		PostMap:      postMap,
+		Interactions: interactions,
+	}
+}
+
+// GetFeed returns the user's feed with posts sorted by relevance.
+func (f *Feed) GetFeed() []Post {
+	// Create a map to store the score of each post based on interactions
+	interactionScores := make(map[int]int)
+
+	// Count interactions for each post
+	for _, interaction := range f.Interactions {
+		interactionScores[interaction.PostID]++
+	}
+
+	// Sort post IDs based on their scores in descending order
+	sort.Slice(f.PostIDs, func(i, j int) bool {
+		scoreI := interactionScores[f.PostIDs[i]]
+		scoreJ := interactionScores[f.PostIDs[j]]
+		return scoreI > scoreJ
+	})
+
+	// Create a slice to store posts in the sorted order
+	feedPosts := make([]Post, len(f.PostIDs))
+	for i, postID := range f.PostIDs {
+		feedPosts[i] = f.PostMap[postID]
+	}
+
+	return feedPosts
+}
 
 func main() {
-	fmt.Println("Project starts here")
-	models.RegStudent()
-	_, new_sample := models.ReadStudent("m.18EEE12811")
-	json.Unmarshal(new_sample, &p)
-	dept := string(p.Department)
-	matno := string(p.Matno)
-	name := string(p.Name)
-	level := string(p.Level)
-	fmt.Println(dept, matno, name, level)
+	// Example usage
+	posts := []Post{
+		{ID: 1, UserID: 101, Content: "Hello, world!", Timestamp: time.Now()},
+		{ID: 2, UserID: 102, Content: "Golang is awesome!", Timestamp: time.Now().Add(-time.Hour)},
+		// Add more posts as needed
+	}
 
+	interactions := []UserInteraction{
+		{UserID: 201, PostID: 1, Like: true, Timestamp: time.Now()},
+		{UserID: 202, PostID: 1, Comment: true, Timestamp: time.Now().Add(-30 * time.Minute)},
+		// Add more interactions as needed
+	}
 
+	// Create a new user feed
+	userFeed := NewFeed(201, posts, interactions)
+	// Get the user's feed
+	feed := userFeed.GetFeed()
 
-	//Vars
-	params := mux.Vars(r)
-    	id := params["id"]
-    	id = strings.Trim(id, "{}")
-    	fmt.Println(id)
-
-
-
-
-
-
-
-
-
-
-
-
-    	 {{range .}}
-                                        <div class="item">
-                                            <a href="/adduser?user={{.}}" class="user-status-box">
-                                                <div class="avatar-xs mx-auto d-block chat-user-img online">
-                                                    <img src="assets/images/users/avatar-2.jpg" alt="user-img"
-                                                        class="img-fluid rounded-circle">
-                                                    <span class="user-status"></span>
-                                                </div>
-
-                                                <h5 class="font-size-13 text-truncate mt-3 mb-1">{{.}}</h5>
+	// Print the user's feed
+	fmt.Println("User Feed:")
+	for _, post := range feed {
+		fmt.Printf("Post ID: %d, Content: %s\n", post.ID, post.Content)
+	}
+}
