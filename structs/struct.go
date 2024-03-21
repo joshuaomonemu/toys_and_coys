@@ -55,3 +55,7 @@ type MinUserPayload struct {
 	Errors  error  `json:"errors"`
 	Message string `json:"message"`
 }
+
+type JWTPayload struct {
+	UserId string `json:"userId"`
+}

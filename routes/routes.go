@@ -20,7 +20,7 @@ func Routes() {
 	port = "2020"
 
 	//Endpoints and Route points for users
-	r.Handle("/index", middleware.ValidateJWT(controller.Index)).Methods("POST")
+	r.Handle("/index", middleware.Authenticate(controller.Index)).Methods("POST")
 	r.HandleFunc("/user/create", controller.CreateUser).Methods("POST")
 	r.HandleFunc("/user/delete/{id}", controller.DeleteUser).Methods("DELETE")
 	r.HandleFunc("/user/get/{id}", controller.ReadUser).Methods("GET")
@@ -33,9 +33,7 @@ func Routes() {
 
 	r.HandleFunc("/comment/create/{id}", controller.CreateComment).Methods("POST")
 	r.HandleFunc("/comment/delete/{id}", controller.DeleteComment).Methods("DELETE")
-	r.Handle("/comments/getall", middleware.ValidateJWT(controller.GetallComments)).Methods("GET")
-
-	r.HandleFunc("/jwt", middleware.GetJwt)
+	r.Handle("/comments/getall", middleware.Authenticate(controller.GetallComments)).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
