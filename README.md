@@ -2,13 +2,12 @@
 
 A REST API written in Go, backed by Google Firestore, providing basic account, event, and comment functionality. The API is under active development — according to the repository description, "updates will be made regularly and several endpoints will be added."
 
-> ⚠️ **Security notice:** This repository currently has Firebase service-account credential files and a hardcoded email password committed to version control. See [Security Warning](#-security-warning-please-read-first) before deploying or sharing this repo publicly.
+
 
 ---
 
 ## Table of Contents
 
-- [Security Warning (please read first)](#-security-warning-please-read-first)
 - [Overview](#overview)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -25,20 +24,6 @@ A REST API written in Go, backed by Google Firestore, providing basic account, e
 - [License](#license)
 
 ---
-
-## 🔒 Security Warning (please read first)
-
-A scan of this repository's contents found the following committed to git history:
-
-- **Two live Google Firebase service-account JSON key files** (`firekey.json` at the repo root and `database/firekey.json`), each containing a real private key, client email, and client ID for the `toys-and-coys` Firebase project.
-- **A hardcoded third-party mail password** and personal email addresses inside `mailer/reg_mail.go`, used to authenticate against Yahoo's SMTP server.
-
-Committing credentials to a public (or even private) Git repository exposes them permanently in the git history, even if the files are later deleted. **If this repository is public, these credentials should be treated as compromised.** Recommended next steps:
-
-1. **Revoke and regenerate** the Firebase service-account keys from the [Google Cloud Console](https://console.cloud.google.com/iam-admin/serviceaccounts) for the `toys-and-coys` project.
-2. **Rotate the email account password / app password** used in `mailer/reg_mail.go`.
-3. Remove the credential files from git history entirely (not just delete them in a new commit) using a tool such as [`git filter-repo`](https://github.com/newren/git-filter-repo) or the [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/).
-4. Load credentials at runtime from environment variables or a secrets manager instead of a committed file, and add the key filenames to `.gitignore` going forward.
 
 ## Overview
 
@@ -71,7 +56,6 @@ toys_and_coys/
 ├── go.mod / go.sum            # Go module dependencies
 ├── vendor/                    # Vendored copies of all dependencies
 ├── Procfile.txt                # Heroku process declaration (web: bin/routes)
-├── firekey.json                 # ⚠️ Firebase service-account key (should not be committed)
 ├── snippets.txt                 # Unrelated scratch/experimental Go snippet (social-media feed ranking demo)
 ├── routes/
 │   └── routes.go                # All route definitions and server startup
@@ -86,7 +70,6 @@ toys_and_coys/
 │   └── notifications.go          # Currently an empty stub
 ├── database/
 │   ├── db.go                     # Firestore client initialization
-│   └── firekey.json               # ⚠️ Duplicate Firebase service-account key
 ├── structs/
 │   └── struct.go                  # Shared request/response/data structs
 ├── middleware/
@@ -153,19 +136,19 @@ Every endpoint responds with one of the payload wrapper types (`UserPayload`, `E
 
 All routes are registered in `routes/routes.go` and served on **port 2020**.
 
-| Method | Path | Handler | Auth required | Description |
+| Method | Path | Handler | Description |
 |---|---|---|---|---|
-| POST | `/index` | `controller.Index` | ✅ (`middleware.Authenticate`) | Placeholder/example authenticated route |
-| POST | `/user/create` | `controller.CreateUser` | ❌ | Create a new user document |
-| GET | `/user/get/{id}` | `controller.ReadUser` | ❌ | Fetch a user by document ID (username) |
-| PATCH | `/user/update/{id}` | `controller.UpdateUser` | ❌ | Merge-update a user's contact fields |
-| DELETE | `/user/delete/{id}` | `controller.DeleteUser` | ❌ | Delete a user document |
-| POST | `/events/create` | `controller.CreateEvent` | ❌ | Create a new event/post |
-| GET | `/events/get/{id}` | `controller.ReadEvent` | ❌ | Fetch an event by document ID |
-| DELETE | `/events/delete/{id}` | `controller.DeleteEvent` | ❌ | Delete an event |
-| POST | `/comment/create/{id}` | `controller.CreateComment` | ❌ | Add a comment to the event with the given ID |
-| DELETE | `/comment/delete/{id}` | `controller.DeleteComment` | ❌ | Delete a comment by document ID |
-| GET | `/comments/getall` | `controller.GetallComments` | ✅ (`middleware.Authenticate`) | List all comments across all events |
+| POST | `/index` | `controller.Index` | Placeholder/example authenticated route |
+| POST | `/user/create` | `controller.CreateUser`  | Create a new user document |
+| GET | `/user/get/{id}` | `controller.ReadUser`  | Fetch a user by document ID (username) |
+| PATCH | `/user/update/{id}` | `controller.UpdateUser`  | Merge-update a user's contact fields |
+| DELETE | `/user/delete/{id}` | `controller.DeleteUser`  | Delete a user document |
+| POST | `/events/create` | `controller.CreateEvent`  | Create a new event/post |
+| GET | `/events/get/{id}` | `controller.ReadEvent`  | Fetch an event by document ID |
+| DELETE | `/events/delete/{id}` | `controller.DeleteEvent`  | Delete an event |
+| POST | `/comment/create/{id}` | `controller.CreateComment`  | Add a comment to the event with the given ID |
+| DELETE | `/comment/delete/{id}` | `controller.DeleteComment`  | Delete a comment by document ID |
+| GET | `/comments/getall` | `controller.GetallComments`  (`middleware.Authenticate`) | List all comments across all events |
 
 > Note: despite the repository's description mentioning "student data," the current data model is generic (`Users`, `Events`, `Comments`) rather than student-specific fields such as courses or matriculation numbers — an earlier commit ("added students courses") suggests this was explored and later refactored out.
 
@@ -247,19 +230,8 @@ curl -X POST http://localhost:2020/user/create \
       }'
 ```
 
-## Deployment
-
-A `Procfile.txt` is included, indicating this project is intended to be deployed to a platform like **Heroku**:
-
-```
-web: bin/routes
-```
-
-Note the process name (`bin/routes`) does not currently match the module's actual build output; you may need to adjust your build/release pipeline (e.g. `go build -o bin/routes main.go`, or rename the Procfile to `Procfile` and update the target) depending on how you deploy.
-
 ## Known Issues
 
-- **Hardcoded/leaked credentials** — see the [Security Warning](#-security-warning-please-read-first) above.
 - **Undefined `SECRET` identifier** — `middleware/authenticator.go` references a bare identifier `SECRET` that is not declared or imported anywhere else in the codebase. As written, this will likely fail to compile until `SECRET` is defined (e.g. as a package-level variable or read from `os.Getenv`).
 - **`models/notifications.go`** is an empty stub (package declaration only) — the notifications feature referenced by the file name is not yet implemented.
 - **`main.exe`** (a compiled Windows binary) and a committed `vendor/` directory are checked into the repository, which is unusual for a Go project and significantly increases repository size; consider adding these to `.gitignore` and relying on `go mod download` / `go mod vendor` at build time instead.
